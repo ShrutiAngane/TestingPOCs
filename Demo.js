@@ -30,6 +30,7 @@ const Demo = () => {
       setPIP(true)  
     }else{
       setPIP(false)
+      console.log('active')
     }
   };
 
@@ -60,22 +61,25 @@ const Demo = () => {
 
 
   return (
-    <View style={styles.container}>
-      <Video
-        style={styles.videoplayer}
-        source={{uri : 'https://cdn.discordapp.com/attachments/803610061002768387/1134060366234661005/Baymax.mp4'}}
-        controls={true}
-        ref={videoRef}
-        playInBackground={true}
-        />
-        {!pip && !fullscreen && <TouchableOpacity style={styles.button} onPress={handleFullScreen}>
-          <Text style={styles.text}>Play Video</Text>
-        </TouchableOpacity>}
+    <View style={{backgroundColor:'#000000',flex:1}}>
+      <View style={{width: '100%', height: pip || fullscreen ? '100%':300}}>
+        <Video
+          style={{flex:!pip?1:0,width:'100%',height:pip || fullscreen?'100%':300,justifyContent:pip?'center':'flex-start',alignItems:pip?'center':'flex-start'}}
+          source={{uri : 'https://cdn.discordapp.com/attachments/803610061002768387/1134060366234661005/Baymax.mp4'}}
+          controls={true}
+          ref={videoRef}
+          playInBackground={true}
+          />
+      </View>
+      <View style={{width:'100%',height:500,backgroundColor:'yellow',flex:1,gap:30}}>
+        <Text style={{color:'#000000',fontSize:20}}>Hello I am another component !</Text>
+        <TouchableOpacity style={styles.button} onPress={handleFullScreen}>
+          <Text style={styles.text}>Play Video!</Text>
+        </TouchableOpacity>
+      </View>
     </View>
+
     
   )
 }
-
-
-
 export default Demo
