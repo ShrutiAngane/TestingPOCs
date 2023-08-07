@@ -54,7 +54,7 @@ const Demo = () => {
   }
 
   const styles=StyleSheet.create({
-    videoplayer:{width:'100%',height:300},
+    videoplayer:{width:'100%',height:fullscreen?'100%':300},
     container:{flex:1,backgroundColor:'#000000',gap:60,justifyContent:pip?'center':'flex-start'},
     button:{width:'100%',height:70,display:'flex',justifyContent:'center',alignItems:'center',backgroundColor:'green'},
     text:{color:'#FFFFFF',fontSize:18},
