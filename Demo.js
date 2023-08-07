@@ -27,11 +27,9 @@ const Demo = () => {
 
     setAppState(nextAppState);
     if (nextAppState === 'background') {
-      console.log('background')
       setPIP(true)  
     }else{
       setPIP(false)
-      console.log('active')
     }
   };
 
