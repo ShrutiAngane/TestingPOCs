@@ -8,7 +8,6 @@ import android.util.Rational;
 
 import androidx.annotation.NonNull;
 
-import com.facebook.react.bridge.CatalystInstance;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -39,27 +38,20 @@ public class MyCustomPIPModule extends ReactContextBaseJavaModule {
             getCurrentActivity().enterPictureInPictureMode(params);
         }
     }
+
     @ReactMethod
-    public void exitPIPMode() {
-        Activity currentActivity = getCurrentActivity();
-        if (currentActivity != null) {
-            // Check if the current activity is in PiP mode
-            if (currentActivity.isInPictureInPictureMode()) {
-                // Exit PiP mode by finishing the current activity
-                currentActivity.finish();
-            }
+    public void checkPlayer(boolean value) {
+        // Handle the received boolean value in your MainActivity
+        Log.d("MyTag", "Variable value: " + value);
+        Activity activity = getCurrentActivity();
+        if (activity instanceof MainActivity) {
+            MainActivity mainActivity = (MainActivity) activity;
+            mainActivity.receiveBooleanData(value);
         }
     }
+
     @ReactMethod
-    public void pauseVideo() {
-        ReactContext reactContext = getReactApplicationContext();
-        Log.e("TAG", "we are in" );
-        if(reactContext!=null) {
-            Log.e("TAG", "context is not null " );
-            reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                    .emit("pauseVideo", true);
-        }else{
-            Log.e("TAG", "context is null " );
-        }
+    public void DummyMethod(){
+        Log.e("TAG","i am dummy");
     }
 }

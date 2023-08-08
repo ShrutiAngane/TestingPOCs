@@ -1,18 +1,22 @@
 import React, { useState,useRef,useEffect } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View,AppState,StatusBar } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View,AppState,StatusBar,NativeModules} from 'react-native';
 import Video from 'react-native-video';
-import MyCustomModule from './MyCustomModule'
 import Orientation from 'react-native-orientation-locker';
 
 
 
+
 const Demo = () => {
+  const {PipModule} = NativeModules;
   const [appState, setAppState] = useState(AppState.currentState);
   const[pip,setPIP]=useState(false);
   const[fullscreen,setFullScreen]=useState(false)
+  const[overlay,setOverlay]=useState(false)
+  const[isPlaying,setIsPlaying]=useState(true)
   const videoRef = useRef(null);
   useEffect(() => {
 
+    PipModule.checkPlayer(true);  //because here the video autoplays onload of application
     AppState.addEventListener('change', handleAppStateChange);
     // const myCustomPIPModule = new NativeEventEmitter(NativeModules.PipModule);
 
@@ -30,7 +34,6 @@ const Demo = () => {
       setPIP(true)  
     }else{
       setPIP(false)
-      console.log('active')
     }
   };
 
@@ -52,6 +55,28 @@ const Demo = () => {
     }
   }
 
+  const handleOverlay=()=>{
+    if(overlay){
+      setOverlay(false)
+    }else{
+      setOverlay(true)
+    }
+  }
+
+  const handleControls=()=>{
+    if(isPlaying){
+      setIsPlaying(false)
+      //MyCustomModule.checkPlayer(false);
+      // PipModule.EnterPipMode();
+      // PipModule.DummyMethod();
+      PipModule.checkPlayer(false)
+    }else{
+      setIsPlaying(true)
+      PipModule.checkPlayer(true);
+      //MyCustomModule.checkPlayer(true);
+    }
+  }
+
   const styles=StyleSheet.create({
     videoplayer:{width:'100%',height:fullscreen?'100%':300},
     container:{flex:1,backgroundColor:'#000000',gap:60,justifyContent:pip?'center':'flex-start'},
@@ -62,15 +87,23 @@ const Demo = () => {
 
   return (
     <View style={{backgroundColor:'#000000',flex:1}}>
-      <View style={{width: '100%', height: pip || fullscreen ? '100%':300}}>
-        <Video
-          style={{flex:!pip?1:0,width:'100%',height:pip || fullscreen?'100%':300,justifyContent:pip?'center':'flex-start',alignItems:pip?'center':'flex-start'}}
-          source={{uri : 'https://cdn.discordapp.com/attachments/803610061002768387/1134060366234661005/Baymax.mp4'}}
-          controls={true}
-          ref={videoRef}
-          playInBackground={true}
-          />
-      </View>
+      <TouchableOpacity onPress={handleOverlay}>
+        <View style={{width: '100%', height: pip || fullscreen ? '100%':300}}>
+          <Video
+            style={{flex:!pip?1:0,width:'100%',height:pip || fullscreen?'100%':300,justifyContent:pip?'center':'flex-start',alignItems:pip?'center':'flex-start'}}
+            source={{uri : 'https://cdn.discordapp.com/attachments/803610061002768387/1134060366234661005/Baymax.mp4'}}
+            controls={false}
+            ref={videoRef}
+            paused={!isPlaying}
+            playInBackground={true}
+            />
+            {overlay && <TouchableOpacity style={{position:'absolute',width:'100%',height:'100%'}} onPress={handleOverlay}>
+              <View style={{width:'100%',height:'100%',backgroundColor:'rgba(0,0,0,0.6)',flex:1,justifyContent:'center',alignItems:'center'}}>
+                <TouchableOpacity onPress={()=>handleControls()}><Text style={styles.text}>{isPlaying?'Pause':'Play'}</Text></TouchableOpacity>
+              </View>
+            </TouchableOpacity>}
+        </View>
+      </TouchableOpacity>
       <View style={{width:'100%',height:500,backgroundColor:'yellow',flex:1,gap:30}}>
         <Text style={{color:'#000000',fontSize:20}}>Hello I am another component !</Text>
         <TouchableOpacity style={styles.button} onPress={handleFullScreen}>

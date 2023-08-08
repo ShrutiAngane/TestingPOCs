@@ -1,42 +1,42 @@
 package com.pip;
 
-import android.content.pm.ActivityInfo;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactInstanceManager;
-import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.pip.MyCustomPIPModule;
+
 import android.content.Intent;
 import android.content.res.Configuration;
 
 
 
 public class MainActivity extends ReactActivity {
-  // MyCustomPIPModule module=new MyCustomPIPModule((ReactApplicationContext) getReactInstanceManager().getCurrentReactContext());
+    private static boolean isPlaying;
+    // MyCustomPIPModule module=new MyCustomPIPModule((ReactApplicationContext) getReactInstanceManager().getCurrentReactContext());
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
    * rendering of the component.
    */
-  @Override
+
+  private ReactInstanceManager reactInstanceManager;
+
+    public static void receiveBooleanData(boolean value) {
+        isPlaying=value;
+    }
+
+    @Override
   protected String getMainComponentName() {
     return "PIP";
   }
 
-  /**
-   * Returns the instance of the {@link ReactActivityDelegate}. Here we use a util class {@link
-   * DefaultReactActivityDelegate} which allows you to easily enable Fabric and Concurrent React
-   * (aka React 18) with two boolean flags.
-   */
-  private ReactInstanceManager reactInstanceManager;
-
-  @Override
+    @Override
   protected ReactActivityDelegate createReactActivityDelegate() {
     return new DefaultReactActivityDelegate(
         this,
@@ -48,13 +48,27 @@ public class MainActivity extends ReactActivity {
         );
 
   }
-  @Override
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        reactInstanceManager = ((MainApplication) getApplication()).getReactNativeHost().getReactInstanceManager();
+    }
+
+    @Override
   protected void onPause(){
     super.onPause();
     Log.e("TAG", "onPause: " );
     MyCustomPIPModule customModule = new MyCustomPIPModule(getReactNativeHost().getReactInstanceManager().getCurrentReactContext());
-    // module.EnterPipMode();
-    customModule.EnterPipMode();
+    //customModule.EnterPipMode();
+    if(isPlaying) {
+        Log.e("TAG","playing is true");
+        customModule.EnterPipMode();
+    }else{
+        Log.e("TAG","playing is false");
+        finish();
+    }
+
 
   }
   @Override
@@ -69,10 +83,6 @@ public class MainActivity extends ReactActivity {
   protected void onStop() {
       super.onStop();
       Log.e("TAG", "onStop: " );
-      //MyCustomPIPModule customModule = new MyCustomPIPModule(getReactNativeHost().getReactInstanceManager().getCurrentReactContext());
-      //customModule.pauseVideo();
-      //finishAndRemoveTask();
-      //finishAffinity();
       finish();
 
     }
