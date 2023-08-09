@@ -66,14 +66,11 @@ const Demo = () => {
   const handleControls=()=>{
     if(isPlaying){
       setIsPlaying(false)
-      //MyCustomModule.checkPlayer(false);
-      // PipModule.EnterPipMode();
-      // PipModule.DummyMethod();
       PipModule.checkPlayer(false)
-    }else{
+    }else
+    {
       setIsPlaying(true)
       PipModule.checkPlayer(true);
-      //MyCustomModule.checkPlayer(true);
     }
   }
 
