@@ -6,6 +6,7 @@ import Orientation from 'react-native-orientation-locker';
 
 
 
+
 const Demo = () => {
   const {PipModule} = NativeModules;
   const [appState, setAppState] = useState(AppState.currentState);
@@ -83,33 +84,65 @@ const Demo = () => {
 
 
   return (
-    <View style={{backgroundColor:'#000000',flex:1}}>
+    <View style={{backgroundColor: '#000000', flex: 1}}>
       <TouchableOpacity onPress={handleOverlay}>
-        <View style={{width: '100%', height: pip || fullscreen ? '100%':300}}>
-          <Video
-            style={{flex:!pip?1:0,width:'100%',height:pip || fullscreen?'100%':300,justifyContent:pip?'center':'flex-start',alignItems:pip?'center':'flex-start'}}
-            source={{uri : 'https://cdn.discordapp.com/attachments/803610061002768387/1134060366234661005/Baymax.mp4'}}
-            controls={false}
-            ref={videoRef}
-            paused={!isPlaying}
-            playInBackground={true}
+        <View style={{width: '100%', height: pip || fullscreen ? '100%' : 300}}>
+            <Video
+              source={{
+                uri: 'https://cdn.discordapp.com/attachments/803610061002768387/1134060366234661005/Baymax.mp4',
+              }}
+              paused={!isPlaying}
+              playInBackground={true}
+              ref={videoRef}
+              controls={false}
+              style={{
+                flex: !pip ? 1 : 0,
+                width: '100%',
+                height: pip || fullscreen ? '100%' : 300,
+                justifyContent: pip ? 'center' : 'flex-start',
+                
+                alignItems: pip ? 'center' : 'flex-start',
+              }}
             />
-            {overlay && <TouchableOpacity style={{position:'absolute',width:'100%',height:'100%'}} onPress={handleOverlay}>
-              <View style={{width:'100%',height:'100%',backgroundColor:'rgba(0,0,0,0.6)',flex:1,justifyContent:'center',alignItems:'center'}}>
-                <TouchableOpacity onPress={()=>handleControls()}><Text style={styles.text}>{isPlaying?'Pause':'Play'}</Text></TouchableOpacity>
+          {overlay && (
+            <TouchableOpacity
+              style={{position: 'absolute', width: '100%', height: '100%'}}
+              onPress={handleOverlay}>
+              <View
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: 'rgba(0,0,0,0.6)',
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <TouchableOpacity onPress={() => handleControls()}>
+                  <Text style={styles.text}>
+                    {isPlaying ? 'Pause' : 'Play'}
+                  </Text>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>}
+            </TouchableOpacity>
+          )}
         </View>
       </TouchableOpacity>
-      <View style={{width:'100%',height:500,backgroundColor:'yellow',flex:1,gap:30}}>
-        <Text style={{color:'#000000',fontSize:20}}>Hello I am another component !</Text>
+      <View
+        style={{
+          width: '100%',
+          height: 500,
+          backgroundColor: 'yellow',
+          flex: 1,
+          gap: 30,
+        }}>
+        <Text style={{color: '#000000', fontSize: 20}}>
+          Hello I am another component !
+        </Text>
         <TouchableOpacity style={styles.button} onPress={handleFullScreen}>
           <Text style={styles.text}>Play Video!</Text>
         </TouchableOpacity>
       </View>
     </View>
-
-    
-  )
+  );
 }
 export default Demo
