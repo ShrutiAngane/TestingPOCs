@@ -89,8 +89,7 @@ const Demo = () => {
     <View style={{backgroundColor: '#000000', flex: 1}}>
       <TouchableOpacity onPress={handleOverlay}>
         <View style={{width: '100%', height: pip || fullscreen ? '100%' : 300}}>
-            <Video
-              source={{
+          <MuxVideo source={{
                 uri: 'https://cdn.discordapp.com/attachments/803610061002768387/1134060366234661005/Baymax.mp4',
               }}
               paused={!isPlaying}
@@ -104,8 +103,8 @@ const Demo = () => {
                 justifyContent: pip ? 'center' : 'flex-start',
                 
                 alignItems: pip ? 'center' : 'flex-start',
-              }}
-            />
+              }}>
+          </MuxVideo>
           {overlay && (
             <TouchableOpacity
               style={{position: 'absolute', width: '100%', height: '100%'}}
