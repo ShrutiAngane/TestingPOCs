@@ -1,21 +1,22 @@
 import React, { useState,useRef,useEffect } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View,AppState,StatusBar,NativeModules} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View,AppState,StatusBar,NativeModules,Image} from 'react-native';
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
 import muxReactNativeVideo from '@mux/mux-data-react-native-video';
+import app from './package.json';
 
 
-
+const MuxVideo = muxReactNativeVideo(Video);
+const {PipModule} = NativeModules;
 
 const Demo = () => {
-  const {PipModule} = NativeModules;
   const [appState, setAppState] = useState(AppState.currentState);
   const[pip,setPIP]=useState(false);
   const[fullscreen,setFullScreen]=useState(false)
   const[overlay,setOverlay]=useState(false)
   const[isPlaying,setIsPlaying]=useState(true)
   const videoRef = useRef(null);
-  const MuxVideo = muxReactNativeVideo(Video);
+  
   
   useEffect(() => {
 
@@ -61,20 +62,23 @@ const Demo = () => {
   const handleOverlay=()=>{
     if(overlay){
       setOverlay(false)
+      PipModule.checkPlayer(true);
     }else{
       setOverlay(true)
+      PipModule.checkPlayer(false)
     }
   }
 
   const handleControls=()=>{
-    if(isPlaying){
-      setIsPlaying(false)
-      PipModule.checkPlayer(false)
-    }else
-    {
-      setIsPlaying(true)
-      PipModule.checkPlayer(true);
-    }
+      if(isPlaying){
+        setIsPlaying(false)
+        PipModule.checkPlayer(false)
+      }else
+      {
+        setIsPlaying(true)
+        PipModule.checkPlayer(true);
+      }
+    
   }
 
   const styles=StyleSheet.create({
@@ -87,22 +91,30 @@ const Demo = () => {
 
   return (
     <View style={{backgroundColor: '#000000', flex: 1}}>
-      <TouchableOpacity onPress={handleOverlay}>
+       <TouchableOpacity onPress={handleOverlay}>
         <View style={{width: '100%', height: pip || fullscreen ? '100%' : 300}}>
           <MuxVideo source={{
                 uri: 'https://cdn.discordapp.com/attachments/803610061002768387/1134060366234661005/Baymax.mp4',
               }}
-              paused={!isPlaying}
-              playInBackground={true}
-              ref={videoRef}
-              controls={false}
               style={{
                 flex: !pip ? 1 : 0,
                 width: '100%',
                 height: pip || fullscreen ? '100%' : 300,
                 justifyContent: pip ? 'center' : 'flex-start',
-                
                 alignItems: pip ? 'center' : 'flex-start',
+              }}
+              playInBackground={true}
+              paused={!isPlaying}
+              muxOptions={{
+                application_name: app.name,           // (required) the name of your application
+                application_version: app.version,      // the version of your application (optional, but encouraged)
+                data: {
+                  env_key: '1698phtdt3cu586krk2tfedvb',     // (required)
+                  video_id: 'MuxTesting1.0',             // (required)
+                  video_title: 'My mux testing',
+                  player_software_version: '5.0.2',     // (optional, but encouraged) the version of react-native-video that you are using
+                  player_name: 'React Native Player',  // See metadata docs for available metadata fields https://docs.mux.com/docs/web-integration-guide#section-5-add-metadata
+                },
               }}>
           </MuxVideo>
           {overlay && (
@@ -119,9 +131,7 @@ const Demo = () => {
                   alignItems: 'center',
                 }}>
                 <TouchableOpacity onPress={() => handleControls()}>
-                  <Text style={styles.text}>
-                    {isPlaying ? 'Pause' : 'Play'}
-                  </Text>
+                 <Image source={isPlaying?require('./assets/images/pause.png'):require('./assets/images/play.png')} style={{height:30,width:30}}></Image>
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
