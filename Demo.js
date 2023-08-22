@@ -89,12 +89,13 @@ const Demo = () => {
         <View style={{width: '100%', height: pip || fullscreen ? '100%' : 300}}>
             <Video
               source={{
-                uri: 'https://cdn.discordapp.com/attachments/803610061002768387/1134060366234661005/Baymax.mp4',
+                uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
               }}
               paused={!isPlaying}
+              resizeMode='stretch'
               playInBackground={true}
               ref={videoRef}
-              controls={false}
+              controls={true}
               style={{
                 flex: !pip ? 1 : 0,
                 width: '100%',
@@ -104,7 +105,7 @@ const Demo = () => {
                 alignItems: pip ? 'center' : 'flex-start',
               }}
             />
-          {overlay && (
+          {/* {overlay && (
             <TouchableOpacity
               style={{position: 'absolute', width: '100%', height: '100%'}}
               onPress={handleOverlay}>
@@ -124,7 +125,7 @@ const Demo = () => {
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
-          )}
+          )} */}
         </View>
       </TouchableOpacity>
       <View

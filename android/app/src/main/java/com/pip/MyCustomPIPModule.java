@@ -7,6 +7,7 @@ import android.util.Log;
 import android.util.Rational;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -20,7 +21,7 @@ public class MyCustomPIPModule extends ReactContextBaseJavaModule {
 
     MyCustomPIPModule(ReactContext reactContext){
         super((ReactApplicationContext) reactContext);
-        aspectRatio = new Rational(16,9);
+        aspectRatio = new Rational(280,200);
     }
 
 
@@ -30,11 +31,12 @@ public class MyCustomPIPModule extends ReactContextBaseJavaModule {
         return "PipModule";
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
     @ReactMethod
     public void EnterPipMode(){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            PictureInPictureParams params = new PictureInPictureParams.Builder().setAspectRatio(this.aspectRatio).build();
+            PictureInPictureParams params = new PictureInPictureParams.Builder().setAspectRatio(this.aspectRatio).setAutoEnterEnabled(true).setSeamlessResizeEnabled(true).build();
             getCurrentActivity().enterPictureInPictureMode(params);
         }
     }
