@@ -92,7 +92,7 @@ const Demo = () => {
                 uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
               }}
               paused={!isPlaying}
-              resizeMode='stretch'
+              resizeMode={pip?'stretch':'contain'}
               playInBackground={true}
               ref={videoRef}
               controls={true}
@@ -140,7 +140,7 @@ const Demo = () => {
           Hello I am another component !
         </Text>
         <TouchableOpacity style={styles.button} onPress={handleFullScreen}>
-          <Text style={styles.text}>Play Video!</Text>
+          <Text style={styles.text}>Enter Pip mode</Text>
         </TouchableOpacity>
       </View>
     </View>
