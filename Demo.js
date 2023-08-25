@@ -91,11 +91,12 @@ const Demo = () => {
 
   return (
     <View style={{backgroundColor: '#000000', flex: 1}}>
-       <TouchableOpacity onPress={handleOverlay}>
+       <TouchableOpacity>
         <View style={{width: '100%', height: pip || fullscreen ? '100%' : 300}}>
           <MuxVideo source={{
-                uri: 'https://cdn.discordapp.com/attachments/803610061002768387/1134060366234661005/Baymax.mp4',
+                uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
               }}
+              controls
               style={{
                 flex: !pip ? 1 : 0,
                 width: '100%',
@@ -112,12 +113,15 @@ const Demo = () => {
                   env_key: '1698phtdt3cu586krk2tfedvb',     // (required)
                   video_id: 'MuxTesting1.0',             // (required)
                   video_title: 'My mux testing',
+                  video_stream_type:'on-demand',
+                  viewer_device_category:'tablet',
                   player_software_version: '5.0.2',     // (optional, but encouraged) the version of react-native-video that you are using
                   player_name: 'React Native Player',  // See metadata docs for available metadata fields https://docs.mux.com/docs/web-integration-guide#section-5-add-metadata
+                  custom_1:'Premium'
                 },
               }}>
           </MuxVideo>
-          {overlay && (
+          {/* {overlay && (
             <TouchableOpacity
               style={{position: 'absolute', width: '100%', height: '100%'}}
               onPress={handleOverlay}>
@@ -135,7 +139,7 @@ const Demo = () => {
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
-          )}
+          )} */}
         </View>
       </TouchableOpacity>
       <View
